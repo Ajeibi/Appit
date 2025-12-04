@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Login Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        button {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin: 1rem;
+        }
+        button:hover {
+            background: #15803d;
+        }
+        .success {
+            color: #4ade80;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Reset Login Session</h1>
+        <p>This will clear your old login data and allow you to login fresh with the updated user data.</p>
+        
+        <button onclick="clearAndReload()">Clear & Go to Login</button>
+        
+        <div id="message"></div>
+        
+        <div style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">
+            <p><strong>Why do I need this?</strong></p>
+            <p>The system was updated to include supervisor information in the login response.<br>
+            You need to login again to get this new data.</p>
+        </div>
+    </div>
+
+    <script>
+        function clearAndReload() {
+            // Clear all localStorage
+            localStorage.clear();
+            
+            // Show success message
+            document.getElementById('message').innerHTML = '<div class="success">✅ Login data cleared!<br>Redirecting to login...</div>';
+            
+            // Redirect to main app after 1 second
+            setTimeout(() => {
+                window.location.href = 'http://localhost:5173';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
