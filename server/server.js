@@ -21,9 +21,6 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // Database Connection & Sync
 const initDB = async () => {
     await testConnection();
-    // Sync models with DB
-    // force: false ensures we don't drop tables on restart
-    // alter: true updates tables if models change (use with caution in prod)
     await sequelize.sync();
     console.log('✅ Database synchronized');
 };
@@ -59,12 +56,12 @@ app.get('/api/health/db', async (req, res) => {
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'public')));
     
-    // Handle React routing - return all requests to React app
-    app.get('*', (req, res) => {
+    app.use((req, res, next) => {
         // Skip API routes
         if (req.path.startsWith('/api')) {
             return res.status(404).json({ message: 'API route not found' });
         }
+        // Serve index.html for all other routes (React Router)
         res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
 }
