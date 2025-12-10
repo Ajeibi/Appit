@@ -47,8 +47,6 @@ app.get('/api/health/db', async (req, res) => {
     }
 });
 
-// Seed Database Endpoint
-// Access: https://your-app.onrender.com/api/admin/seed?token=YOUR_SEED_TOKEN
 app.get('/api/admin/seed', async (req, res) => {
     try {
         const { token } = req.query;
