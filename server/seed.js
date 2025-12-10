@@ -3,7 +3,17 @@ const bcrypt = require('bcryptjs');
 
 const seed = async () => {
     try {
-        await sequelize.sync({ force: true }); // Reset DB
+        // For SQLite, we need to disable foreign keys before dropping tables
+        await sequelize.query('PRAGMA foreign_keys = OFF');
+        
+        // Drop all tables manually in correct order to avoid FK constraints
+        await sequelize.drop({ cascade: true });
+        
+        // Re-enable foreign keys
+        await sequelize.query('PRAGMA foreign_keys = ON');
+        
+        // Now sync to create fresh tables
+        await sequelize.sync();
 
         const salt = await bcrypt.genSalt(10);
         const password = await bcrypt.hash('password123', salt);

@@ -1,8 +1,22 @@
 import axios from 'axios';
 
 // Create axios instance
+// In production (served from same domain), use relative URL
+// In development, use environment variable or default to localhost
+const getBaseURL = () => {
+    if (import.meta.env.VITE_API_URL) {
+        return import.meta.env.VITE_API_URL;
+    }
+    // If in production and no env var, use relative URL (same domain)
+    if (import.meta.env.PROD) {
+        return '/api';
+    }
+    // Development default
+    return 'http://localhost:5001/api';
+};
+
 const api = axios.create({
-    baseURL: 'http://localhost:5001/api', // Update this for production
+    baseURL: getBaseURL(),
     headers: {
         'Content-Type': 'application/json'
     }
