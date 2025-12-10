@@ -33,11 +33,6 @@ app.use('/api/appraisals', appraisalRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/periods', periodRoutes);
 
-// Health Check
-app.get('/', (req, res) => {
-    res.send('Agro Preciso Appraisal System API is running');
-});
-
 // Database Health Check Endpoint
 app.get('/api/health/db', async (req, res) => {
     try {
@@ -56,6 +51,7 @@ app.get('/api/health/db', async (req, res) => {
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'public')));
     
+    // Handle React routing - return all requests to React app
     app.use((req, res, next) => {
         // Skip API routes
         if (req.path.startsWith('/api')) {
@@ -63,6 +59,11 @@ if (process.env.NODE_ENV === 'production') {
         }
         // Serve index.html for all other routes (React Router)
         res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
+} else {
+    // Development: Show API message on root
+    app.get('/', (req, res) => {
+        res.send('Agro Preciso Appraisal System API is running');
     });
 }
 
